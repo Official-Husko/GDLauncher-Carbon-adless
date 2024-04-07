@@ -60,7 +60,7 @@ jobs:
         run: pnpm codegen
 
       - name: Build Application for macOS
-        run: pnpm build:mac-x64
+        run: pnpm build:mac-universal
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
@@ -90,9 +90,10 @@ jobs:
 
       - name: Build Application for Windows
         run: pnpm build:win-x64
-
+        
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: gdlauncher-win-x64
-          path: dist/win-unpacked/
+          name: gdlauncher-win-unpacked
+          path: ./apps/desktop/release/win-unpacked/resources/app.asar
+
