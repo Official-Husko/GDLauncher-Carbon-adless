@@ -55,11 +55,11 @@ jobs:
       - name: Install project dependencies
         run: pnpm install
 
-    - name: Setup Rust toolchain and targets
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        target: aarch64-apple-darwin,x86_64-apple-darwin
+      - name: Setup Rust toolchain and targets
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: aarch64-apple-darwin,x86_64-apple-darwin
 
       - name: Apply the Patch
         run: git apply < adsbegone-gdlauncher-carbon.patch
