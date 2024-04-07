@@ -27,9 +27,6 @@ jobs:
       - name: Apply the Patch
         run: git apply < adsbegone-gdlauncher-carbon.patch
 
-      - name: Setup Environment Variables
-        run: echo "USER_AGENT_PREFIX = \"\"\nMS_AUTH_CLIENT_ID = \"\"\nMETA_BASE_URL = \"\"\nBASE_API = \"\"\nRUNTIME_PATH = \"\"" > .env
-
       - name: Generate Prisma Code and RSPC Bindings
         run: pnpm codegen
 
@@ -59,9 +56,6 @@ jobs:
       - name: Apply the Patch
         run: git apply < adsbegone-gdlauncher-carbon.patch
 
-      - name: Setup Environment Variables
-        run: echo "USER_AGENT_PREFIX = \"\"\nMS_AUTH_CLIENT_ID = \"\"\nMETA_BASE_URL = \"\"\nBASE_API = \"\"\nRUNTIME_PATH = \"\"" > .env
-
       - name: Generate Prisma Code and RSPC Bindings
         run: pnpm codegen
 
@@ -89,10 +83,7 @@ jobs:
         run: pnpm install
 
       - name: Apply the Patch
-        run: git apply < adsbegone-gdlauncher-carbon.patch
-
-      - name: Setup Environment Variables
-        run: echo "USER_AGENT_PREFIX = \"\"\nMS_AUTH_CLIENT_ID = \"\"\nMETA_BASE_URL = \"\"\nBASE_API = \"\"\nRUNTIME_PATH = \"\"" > .env
+        run: git apply adsgone-gdlauncher-carbon.patch
 
       - name: Generate Prisma Code and RSPC Bindings
         run: pnpm codegen
