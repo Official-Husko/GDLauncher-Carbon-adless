@@ -83,7 +83,7 @@ jobs:
         run: pnpm install
 
       - name: Apply the Patch
-        run: git apply adsgone-gdlauncher-carbon.patch
+        run: git apply adsbegone-gdlauncher-carbon.patch
 
       - name: Generate Prisma Code and RSPC Bindings
         run: pnpm codegen
