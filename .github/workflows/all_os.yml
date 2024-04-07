@@ -13,10 +13,11 @@ jobs:
   build_and_deploy_linux:
     name: Build and Deploy (Linux)
     runs-on: ubuntu-latest
+    timeout-minutes: 80
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -34,24 +35,31 @@ jobs:
         run: pnpm build:linux-x64
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: gdlauncher-linux-x64
-          path: dist/linux-unpacked/
+          name: patched_linux_asar
+          path: ./apps/desktop/release/linux-unpacked/resources/app.asar
 
   build_and_deploy_macos:
     name: Build and Deploy (macOS)
     runs-on: macos-latest
+    timeout-minutes: 80
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install pnpm
         run: npm install -g pnpm
 
       - name: Install project dependencies
         run: pnpm install
+
+    - name: Setup Rust toolchain and targets
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        target: aarch64-apple-darwin,x86_64-apple-darwin
 
       - name: Apply the Patch
         run: git apply < adsbegone-gdlauncher-carbon.patch
@@ -63,18 +71,19 @@ jobs:
         run: pnpm build:mac-universal
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: gdlauncher-macos-x64
-          path: dist/mac/
+          name: patched_mac_asar
+          path: ./apps/desktop/release/mac-unpacked/resources/app.asar
 
   build_and_deploy_windows:
     name: Build and Deploy (Windows)
     runs-on: windows-latest
+    timeout-minutes: 80
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install pnpm
         run: npm install -g pnpm
@@ -90,10 +99,10 @@ jobs:
 
       - name: Build Application for Windows
         run: pnpm build:win-x64
-        
+
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: gdlauncher-win-unpacked
+          name: patched_win_asar
           path: ./apps/desktop/release/win-unpacked/resources/app.asar
 
