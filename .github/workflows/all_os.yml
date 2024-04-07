@@ -1,6 +1,11 @@
 name: Build and Deploy GDLauncher
 
-on: push
+on:
+  push:
+    branches:
+      - patched
+
+
 env:
   CARGO_TERM_COLOR: always
 
