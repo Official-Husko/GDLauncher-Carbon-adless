@@ -1,0 +1,104 @@
+diff --git a/apps/desktop/packages/main/adSize.ts b/apps/desktop/packages/main/adSize.ts
+index 8ab38784..bdf2777a 100644
+--- a/apps/desktop/packages/main/adSize.ts
++++ b/apps/desktop/packages/main/adSize.ts
+@@ -17,8 +17,8 @@ export default function getAdSize(display?: Display) {
+       adSize: {
+         useFallbackAd,
+         useVertical: true,
+-        width: 160,
+-        height: 600
++        width: 0,
++        height: 0
+       }
+     };
+   } else {
+@@ -30,9 +30,9 @@ export default function getAdSize(display?: Display) {
+       adSize: {
+         useFallbackAd,
+         useVertical: false,
+-        width: 400,
+-        height: 600
++        width: 0,
++        height: 0
+       }
+     };
+   }
+-}
++}
+\ No newline at end of file
+diff --git a/apps/desktop/packages/mainWindow/src/components/AdBanner.tsx b/apps/desktop/packages/mainWindow/src/components/AdBanner.tsx
+index 657870ca..5231cbd0 100644
+--- a/apps/desktop/packages/mainWindow/src/components/AdBanner.tsx
++++ b/apps/desktop/packages/mainWindow/src/components/AdBanner.tsx
+@@ -2,13 +2,7 @@ import adSize from "@/utils/adhelper";
+ 
+ export const AdsBanner = () => {
+   return (
+-    <div
+-      style={{
+-        height: `${adSize.height}px`,
+-        width: `${adSize.width}px`
+-      }}
+-    >
+-      <owadview class="relative z-100" />
++    <div>
+     </div>
+   );
+ };
+diff --git a/apps/desktop/packages/mainWindow/src/global.d.ts b/apps/desktop/packages/mainWindow/src/global.d.ts
+index 8a25b565..17f1b75e 100644
+--- a/apps/desktop/packages/mainWindow/src/global.d.ts
++++ b/apps/desktop/packages/mainWindow/src/global.d.ts
+@@ -56,9 +56,9 @@ declare global {
+ 
+ declare module "solid-js" {
+   namespace JSX {
+-    interface IntrinsicElements {
++    /*interface IntrinsicElements {
+       owadview: any;
+-    }
++    }*/
+   }
+ }
+ 
+diff --git a/apps/desktop/packages/mainWindow/src/pages/withAds.tsx b/apps/desktop/packages/mainWindow/src/pages/withAds.tsx
+index 50c6462a..c19b7699 100644
+--- a/apps/desktop/packages/mainWindow/src/pages/withAds.tsx
++++ b/apps/desktop/packages/mainWindow/src/pages/withAds.tsx
+@@ -69,35 +69,7 @@ function withAdsLayout() {
+               <Outlet />
+             </div>
+             <div class="flex flex-col justify-between h-[calc(100vh-100px)]">
+-              <div
+-                class="bg-darkSlate-800 py-4"
+-                style={{
+-                  width: `${adSize.width}px`,
+-                  height: `${adSize.height}px`
+-                }}
+-              >
+-                <Show when={adSize.shouldShow}>
+-                  <Switch>
+-                    <Match when={adSize.useFallbackAd}>
+-                      <BisectBanner />
+-                    </Match>
+-                    <Match when={!adSize.useFallbackAd}>
+-                      <AdsBanner />
+-                    </Match>
+-                  </Switch>
+-                </Show>
+-              </div>
+               <div class="flex justify-center">
+-                <div
+-                  class="text-center hover:text-darkSlate-50 transition-colors duration-200 text-darkSlate-200"
+-                  onClick={() => {
+-                    modalContext?.openModal({
+-                      name: "whyAreAdsNeeded"
+-                    });
+-                  }}
+-                >
+-                  <Trans key="why_are_ads_needed" />
+-                </div>
+               </div>
+             </div>
+             <div class="absolute top-0 left-0 right-0 bottom-0 bg-image-gdlauncher_pattern.svg -z-10" />

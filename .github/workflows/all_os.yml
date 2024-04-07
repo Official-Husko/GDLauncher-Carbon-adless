@@ -1,180 +1,103 @@
-name: All OS
+name: Build and Deploy GDLauncher
 
-on: push
-
-env:
-  CARGO_TERM_COLOR: always
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  mac_universal:
-    defaults:
-      run:
-        working-directory: ./GDLauncher
-    runs-on: macos-12
-    timeout-minutes: 80
+  build_and_deploy_linux:
+    name: Build and Deploy (Linux)
+    runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
-        with:
-          path: GDLauncher
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18.17.0"
-      - uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: 1.75.0
-          targets: aarch64-apple-darwin, x86_64-apple-darwin
-          components: clippy, rustfmt
-      - name: Prepare
-        run: |
-          echo "" > crates/carbon_app/src/db.rs
-          cargo fmt --check
-      - run: |
-          npm run sudo-init
-          chmod -R a+x node_modules
-      - name: Iridium patchfix
-        run: node iridium_patchfix.js
-      - name: Prisma codegen
-        env:
-          CARGO_INCREMENTAL: 0
-        run: pnpm prisma:generate
-      - name: Build
-        run: pnpm build:mac-universal
-        env:
-          CARGO_INCREMENTAL: 0
-          BASE_API: ""
-          MS_AUTH_CLIENT_ID: ""
-          META_BASE_URL: ""
-          USER_AGENT_PREFIX: ""
-          GDL_AUTH: ""
-      - name: Lint
-        run: pnpm lint
-      - name: Clear target before tests to avoid folder getting too big
-        run: rm -rf target
-      - name: Test
-        env:
-          CARGO_INCREMENTAL: 0
-          BASE_API: ""
-          MS_AUTH_CLIENT_ID: ""
-          RUNTIME_PATH: ""
-          META_BASE_URL: ""
-          USER_AGENT_PREFIX: ""
-          GDL_AUTH: ""
-        run: pnpm test
-  ubuntu_x64:
-    defaults:
-      run:
-        working-directory: ./GDLauncher
-    runs-on: ubuntu-22.04
-    timeout-minutes: 80
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          path: GDLauncher
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18.17.0"
-      - uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: 1.75.0
-          targets: x86_64-unknown-linux-gnu
-          components: clippy, rustfmt
-      - name: Prepare
-        run: |
-          echo "" > crates/carbon_app/src/db.rs
-          cargo fmt --check
-      - run: |
-          npm run sudo-init
-          chmod -R a+x node_modules
-      - name: Iridium patchfix
-        run: node iridium_patchfix.js
-      - name: Prisma codegen
-        env:
-          CARGO_INCREMENTAL: 0
-        run: pnpm prisma:generate:linux-x64
-      - name: Build
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install project dependencies
+        run: pnpm install
+
+      - name: Apply the Patch
+        run: git apply < adsbegone-gdlauncher-carbon.patch
+
+      - name: Setup Environment Variables
+        run: echo "USER_AGENT_PREFIX = \"\"\nMS_AUTH_CLIENT_ID = \"\"\nMETA_BASE_URL = \"\"\nBASE_API = \"\"\nRUNTIME_PATH = \"\"" > .env
+
+      - name: Generate Prisma Code and RSPC Bindings
+        run: pnpm codegen
+
+      - name: Build Application for Linux
         run: pnpm build:linux-x64
-        env:
-          CARGO_INCREMENTAL: 0
-          BASE_API: ""
-          MS_AUTH_CLIENT_ID: ""
-          META_BASE_URL: ""
-          USER_AGENT_PREFIX: ""
-          GDL_AUTH: ""
-      - name: Lint
-        run: pnpm lint
-      - name: Clear target before tests to avoid folder getting too big
-        run: rm -rf target
-      - name: Test
-        env:
-          CARGO_INCREMENTAL: 0
-          BASE_API: ""
-          MS_AUTH_CLIENT_ID: ""
-          RUNTIME_PATH: ""
-          META_BASE_URL: ""
-          USER_AGENT_PREFIX: ""
-          GDL_AUTH: ""
-        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- pnpm test
-  windows_x64:
-    defaults:
-      run:
-        working-directory: ./GDLauncher
-    runs-on: windows-2022
-    timeout-minutes: 80
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gdlauncher-linux-x64
+          path: dist/linux-unpacked/
+
+  build_and_deploy_macos:
+    name: Build and Deploy (macOS)
+    runs-on: macos-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install project dependencies
+        run: pnpm install
+
+      - name: Apply the Patch
+        run: git apply < adsbegone-gdlauncher-carbon.patch
+
+      - name: Setup Environment Variables
+        run: echo "USER_AGENT_PREFIX = \"\"\nMS_AUTH_CLIENT_ID = \"\"\nMETA_BASE_URL = \"\"\nBASE_API = \"\"\nRUNTIME_PATH = \"\"" > .env
+
+      - name: Generate Prisma Code and RSPC Bindings
+        run: pnpm codegen
+
+      - name: Build Application for macOS
+        run: pnpm build:mac-x64
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
         with:
-          path: GDLauncher
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18.17.0"
-      - uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: 1.75.0
-          targets: x86_64-pc-windows-msvc
-          components: clippy, rustfmt
-      - name: Prepare
-        shell: bash
-        run: |
-          echo "" > crates/carbon_app/src/db.rs
-          cargo fmt --check
-      - name: init
-        shell: bash
-        run: npm run init
-      - name: Iridium patchfix
-        shell: bash
-        run: node iridium_patchfix.js
-      - name: Prisma codegen
-        shell: bash
-        env:
-          CARGO_INCREMENTAL: 0
-          CARGO_NET_GIT_FETCH_WITH_CLI: true
-        run: pnpm prisma:generate:win-x64
-      - name: Build
-        shell: bash
+          name: gdlauncher-macos-x64
+          path: dist/mac/
+
+  build_and_deploy_windows:
+    name: Build and Deploy (Windows)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install project dependencies
+        run: pnpm install
+
+      - name: Apply the Patch
+        run: git apply < adsbegone-gdlauncher-carbon.patch
+
+      - name: Setup Environment Variables
+        run: echo "USER_AGENT_PREFIX = \"\"\nMS_AUTH_CLIENT_ID = \"\"\nMETA_BASE_URL = \"\"\nBASE_API = \"\"\nRUNTIME_PATH = \"\"" > .env
+
+      - name: Generate Prisma Code and RSPC Bindings
+        run: pnpm codegen
+
+      - name: Build Application for Windows
         run: pnpm build:win-x64
-        env:
-          CARGO_INCREMENTAL: 0
-          BASE_API: ""
-          MS_AUTH_CLIENT_ID: ""
-          META_BASE_URL: ""
-          USER_AGENT_PREFIX: ""
-          GDL_AUTH: ""
-          CARGO_NET_GIT_FETCH_WITH_CLI: true
-      - name: Lint
-        shell: bash
-        run: pnpm lint
-      - name: Clear target before tests to avoid folder getting too big
-        shell: bash
-        run: rm -rf target
-      - name: Test
-        shell: bash
-        env:
-          CARGO_INCREMENTAL: 0
-          BASE_API: ""
-          MS_AUTH_CLIENT_ID: ""
-          RUNTIME_PATH: ""
-          META_BASE_URL: ""
-          USER_AGENT_PREFIX: ""
-          GDL_AUTH: ""
-          CARGO_NET_GIT_FETCH_WITH_CLI: true
-        run: pnpm test
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: gdlauncher-win-x64
+          path: dist/win-unpacked/
