@@ -124,7 +124,7 @@ test.describe("Init Tests", () => {
     expect(errorInnerText).toBeUndefined();
 
     const title = await page.title();
-    expect(title).toBe("GDLauncher Carbon");
+    expect(title).toBe("GDLauncher Carbon - Adless");
   });
 
   test.afterAll(async () => {

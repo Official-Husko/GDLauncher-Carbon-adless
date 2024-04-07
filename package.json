@@ -2,7 +2,7 @@
   "name": "gdlauncher",
   "productName": "GDLauncher",
   "private": true,
-  "description": "GDLauncher Carbon.",
+  "description": "GDLauncher Carbon - Adless.",
   "author": "killpowa <davide@gdlauncher.com>",
   "license": "ARR",
   "scripts": {

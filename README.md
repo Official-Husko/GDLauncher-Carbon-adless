@@ -1,3 +1,18 @@
+# GDLauncher Carbon - Adless Fork
+This fork focuses on privacy by removing any ads and telemetry from the official GDLauncher Carbon. The goal is to keep it up to date with the official releases while
+offering more privacy and no ads.
+
+## Installation
+1. Grab the official latest release from their [Discord](https://discord.gdlauncher.com) or [GitHub Releases](https://github.com/gorilla-devs/GDLauncher-Carbon)
+2. Download the [Latest Patched Release](https://github.com/Official-Husko/GDLauncher-Carbon-adless/releases/latest)
+3. Go to the installation folder (where you installed GDLauncher Carbon)
+4. Go into the `resources` folder and replace the `app.asar` file with the latest patched `app.asar` from the downloaded zip file.
+
+A big thanks to [GameTec-live](https://gist.github.com/GameTec-live/0d5fe22a97cf989010aa9957a31b3348) for their patch which is used in this fork.
+
+<details>
+ <summary><strong>Original README</strong> (click to expand)</summary>
+
 # GDLauncher (Carbon)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 ![Discord](https://img.shields.io/discord/398091532881756161)
@@ -160,3 +175,5 @@ Here you can find the previous versions of the code:
 - [Original C# Code](https://github.com/gorilla-devs/GDLauncher_LEGACY-Full-History/tree/csharp_legacy_launcher)
 - [First Electron/React Version](https://github.com/gorilla-devs/GDLauncher_LEGACY-Full-History/tree/GDLauncher_old)
 - GDLauncher (Discontinued) [Legacy Branch](https://www.github.com/gorilla-devs/GDLauncher)
+
+</details>

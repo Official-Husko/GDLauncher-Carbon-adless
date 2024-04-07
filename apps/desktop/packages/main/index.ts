@@ -444,7 +444,7 @@ async function createWindow(): Promise<BrowserWindow> {
   }
 
   win = new BrowserWindow({
-    title: "GDLauncher Carbon",
+    title: "GDLauncher Carbon - Adless",
     minHeight,
     height,
     minWidth,

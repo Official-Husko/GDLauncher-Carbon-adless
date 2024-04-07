@@ -2,7 +2,7 @@
   "name": "@gd/desktop",
   "productName": "GDLauncher",
   "private": true,
-  "description": "GDLauncher Carbon.",
+  "description": "GDLauncher Carbon - Adless.",
   "author": "GorillaDevs Inc.",
   "license": "ARR",
   "type": "module",
