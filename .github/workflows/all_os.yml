@@ -56,10 +56,11 @@ jobs:
         run: pnpm install
 
       - name: Setup Rust toolchain and targets
-        uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: stable
-          target: aarch64-apple-darwin,x86_64-apple-darwin
+          toolchain: 1.75.0
+          targets: aarch64-apple-darwin, x86_64-apple-darwin
+          components: clippy, rustfmt
 
       - name: Apply the Patch
         run: git apply < adsbegone-gdlauncher-carbon.patch
