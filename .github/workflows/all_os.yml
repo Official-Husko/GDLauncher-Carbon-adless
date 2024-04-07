@@ -56,7 +56,7 @@ jobs:
         run: pnpm install
 
       - name: Setup Rust toolchain and targets
-      - uses: dtolnay/rust-toolchain@master
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: 1.75.0
           targets: aarch64-apple-darwin, x86_64-apple-darwin
