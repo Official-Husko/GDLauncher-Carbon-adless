@@ -6,7 +6,7 @@ console.log(autoUpdater.currentVersion);
 
 export default function initAutoUpdater(win: BrowserWindow | null) {
   autoUpdater.autoDownload = false;
-  autoUpdater.autoInstallOnAppQuit = true;
+  autoUpdater.autoInstallOnAppQuit = false;
 
   ipcMain.handle(
     "checkForUpdates",
