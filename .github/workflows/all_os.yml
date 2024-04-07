@@ -75,7 +75,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: patched_mac_artifacts
-          path: ./apps/desktop/release
+          path: ./apps/desktop/release/mac-universal/GDLauncher.app/Contents/Resources/app.asar
 
   build_and_deploy_windows:
     name: Build and Deploy (Windows)
