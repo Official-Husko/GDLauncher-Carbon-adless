@@ -37,7 +37,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: patched_linux_asar
+          name: linux
           path: ./apps/desktop/release/linux-unpacked/resources/app.asar
 
   build_and_deploy_macos:
@@ -74,7 +74,7 @@ jobs:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: patched_mac_artifacts
+          name: mac
           path: ./apps/desktop/release/mac-universal/GDLauncher.app/Contents/Resources/app.asar
 
   build_and_deploy_windows:
@@ -104,6 +104,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: patched_win_asar
+          name: windows
           path: ./apps/desktop/release/win-unpacked/resources/app.asar
 

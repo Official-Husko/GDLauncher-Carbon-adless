@@ -158,51 +158,6 @@ const AppNavbar = () => {
                     />
                   </Tab>
                 </div>
-                <Show
-                  when={
-                    updateAvailable() ||
-                    updateDownloaded() ||
-                    updateProgress() > 0
-                  }
-                >
-                  <Tab ignored>
-                    <Tooltip
-                      placement="bottom"
-                      content={
-                        <Switch>
-                          <Match when={updateDownloaded()}>
-                            <Trans key="app_update.apply_and_restart" />
-                          </Match>
-                          <Match when={updateProgress() > 0}>
-                            <Trans
-                              key="app_update.downloading"
-                              options={{
-                                progress: updateProgress()
-                              }}
-                            />
-                          </Match>
-                          <Match when={updateAvailable()}>
-                            <Trans key="app_update.new_update_available_text" />
-                          </Match>
-                        </Switch>
-                      }
-                    >
-                      <div
-                        class="text-2xl text-green-500 i-ri:download-2-fill"
-                        classList={{
-                          "hover:text-green-100": !updateDownloaded()
-                        }}
-                        onClick={() => {
-                          if (updateDownloaded()) {
-                            window.installUpdate();
-                          } else {
-                            modalsContext?.openModal({ name: "appUpdate" });
-                          }
-                        }}
-                      />
-                    </Tooltip>
-                  </Tab>
-                </Show>
               </div>
             </TabList>
           </Tabs>
