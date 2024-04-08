@@ -15,20 +15,50 @@ jobs:
     timeout-minutes: 80
 
     steps:
-      - name: Checkout code
+      - name: Make the popcorn
         uses: actions/checkout@v4
 
-      - name: Install pnpm
+      - name: Sit ones fat ass down
         run: npm install -g pnpm
 
-      - name: Install project dependencies
+      - name: Watch anxiously
         run: pnpm install
 
-      - name: Apply the Patch
+      - name: Start to pray
         run: git apply < adsbegone-gdlauncher-carbon.patch
 
-      - name: Generate Prisma Code and RSPC Bindings
+      - name: 1000 yard stare knowing what will happen if it fails
         run: pnpm codegen
 
-      - name: Build Application for Linux
+      - name: Sweat like a motherfucker
         run: pnpm build:linux-x64
+
+  build_and_deploy_windows:
+    name: Windows slop so i can actually test this mess
+    runs-on: windows-latest
+    timeout-minutes: 80
+
+    steps:
+      - name: Make the popcorn
+        uses: actions/checkout@v4
+
+      - name: Sit ones fat ass down
+        run: npm install -g pnpm
+
+      - name: Watch anxiously
+        run: pnpm install
+
+      - name: Start to pray
+        run: git apply adsbegone-gdlauncher-carbon.patch
+
+      - name: 1000 yard stare knowing what will happen if it fails
+        run: pnpm codegen
+
+      - name: sweat like a motherfucker
+        run: pnpm build:win-x64
+
+      - name: Upload something that will definitely crash
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows_slop
+        path: ./apps/desktop/release/win-unpacked/resources/app.asar
