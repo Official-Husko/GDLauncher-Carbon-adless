@@ -9,6 +9,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+
   build_and_deploy_linux:
     name: Linux builds go brrrrrr
     runs-on: ubuntu-latest
@@ -61,4 +62,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows_slop
-        path: ./apps/desktop/release/win-unpacked/resources/app.asar
+          path: ./apps/desktop/release/win-unpacked/resources/app.asar
