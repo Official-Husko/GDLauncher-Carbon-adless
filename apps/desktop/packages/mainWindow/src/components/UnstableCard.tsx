@@ -3,7 +3,7 @@ import { Match, Switch } from "solid-js";
 
 const UnstableCard = () => {
   const isSnapshotRelease = __APP_VERSION__.includes("-snapshot");
-  const isBetaRelease = __APP_VERSION__.includes("-beta");
+  const isBetaRelease = __APP_VERSION__.includes("-stable");
   const isAlphaRelease = __APP_VERSION__.includes("-alpha");
   return (
     <div>
