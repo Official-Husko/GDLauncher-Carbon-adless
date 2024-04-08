@@ -1,17 +1,16 @@
-name: Build and Deploy GDLauncher
+name: Test if shit breaks
 
 on:
   push:
     branches:
-      - patched
-
+      - remove-tracking
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   build_and_deploy_linux:
-    name: Build and Deploy (Linux)
+    name: Linux builds go brrrrrr
     runs-on: ubuntu-latest
     timeout-minutes: 80
 
@@ -33,77 +32,3 @@ jobs:
 
       - name: Build Application for Linux
         run: pnpm build:linux-x64
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux
-          path: ./apps/desktop/release/linux-unpacked/resources/app.asar
-
-  build_and_deploy_macos:
-    name: Build and Deploy (macOS)
-    runs-on: macos-latest
-    timeout-minutes: 80
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Install project dependencies
-        run: pnpm install
-
-      - name: Setup Rust toolchain and targets
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: 1.75.0
-          targets: aarch64-apple-darwin, x86_64-apple-darwin
-          components: clippy, rustfmt
-
-      - name: Apply the Patch
-        run: git apply < adsbegone-gdlauncher-carbon.patch
-
-      - name: Generate Prisma Code and RSPC Bindings
-        run: pnpm codegen
-
-      - name: Build Application for macOS
-        run: pnpm build:mac-universal
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: mac
-          path: ./apps/desktop/release/mac-universal/GDLauncher.app/Contents/Resources/app.asar
-
-  build_and_deploy_windows:
-    name: Build and Deploy (Windows)
-    runs-on: windows-latest
-    timeout-minutes: 80
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Install project dependencies
-        run: pnpm install
-
-      - name: Apply the Patch
-        run: git apply adsbegone-gdlauncher-carbon.patch
-
-      - name: Generate Prisma Code and RSPC Bindings
-        run: pnpm codegen
-
-      - name: Build Application for Windows
-        run: pnpm build:win-x64
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows
-          path: ./apps/desktop/release/win-unpacked/resources/app.asar
-

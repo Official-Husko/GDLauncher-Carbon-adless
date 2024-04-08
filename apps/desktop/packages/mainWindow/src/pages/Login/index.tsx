@@ -14,7 +14,6 @@ import fetchData from "./auth.login.data";
 import { Navigate, useRouteData } from "@solidjs/router";
 import { Trans, supportedLanguages, useTransContext } from "@gd/i18n";
 import { rspc } from "@/utils/rspcClient";
-import TermsAndConditions from "./TermsAndConditions";
 import Logo from "/assets/images/gdlauncher_vertical_logo.svg";
 import BackgroundVideo from "/assets/images/login_background.webm";
 import { handleStatus } from "@/utils/login";
@@ -38,7 +37,6 @@ export default function Login() {
   const isAlreadyAuthenticated = () =>
     routeData?.activeUuid?.data &&
     routeData.accounts.data?.length! > 0 &&
-    routeData.settings.data?.termsAndPrivacyAccepted &&
     Boolean(routeData.settings.data?.metricsEnabledLastUpdate);
 
   const accountEnrollFinalizeMutation = rspc.createMutation(() => ({
@@ -80,7 +78,7 @@ export default function Login() {
   });
 
   createEffect(() => {
-    if (routeData.settings.data?.termsAndPrivacyAccepted) setStep(1);
+    setStep(1);
   });
 
   return (
@@ -167,9 +165,6 @@ export default function Login() {
               </div>
             </Show>
             <Switch>
-              <Match when={step() === 0}>
-                <TermsAndConditions nextStep={nextStep} />
-              </Match>
               <Match when={step() === 1}>
                 <Auth />
               </Match>

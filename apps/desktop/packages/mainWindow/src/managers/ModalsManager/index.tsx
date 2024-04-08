@@ -29,14 +29,6 @@ type Hash = {
 };
 
 const defaultModals = {
-  privacyStatement: {
-    component: lazy(() => import("./modals/PrivacyStatement")),
-    title: "Privacy Statement"
-  },
-  termsAndConditions: {
-    component: lazy(() => import("./modals/TermsAndConditions")),
-    title: "Terms and Conditions"
-  },
   addManagedJava: {
     component: lazy(() => import("./modals/Java/AddManagedJava")),
     title: "Add java version"
@@ -92,10 +84,6 @@ const defaultModals = {
   onBoarding: {
     component: lazy(() => import("./modals/OnBoarding")),
     noHeader: true
-  },
-  whyAreAdsNeeded: {
-    component: lazy(() => import("./modals/WhyAreAdsNeeded")),
-    title: "Why are ads needed?"
   },
   modsUpdater: {
     component: lazy(() => import("./modals/ModsUpdater")),

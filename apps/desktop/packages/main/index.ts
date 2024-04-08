@@ -405,10 +405,6 @@ const loadCoreModule: CoreModule = () =>
 
 const coreModule = loadCoreModule();
 
-if ((app as any).overwolf) {
-  (app as any).overwolf.disableAnonymousAnalytics();
-}
-
 // Set application name for Windows 10+ notifications
 if (process.platform === "win32") app.setAppUserModelId(app.getName());
 
@@ -598,11 +594,6 @@ ipcMain.handle("getCurrentOS", async () => {
 
 ipcMain.handle("openFolder", async (_, path) => {
   shell.showItemInFolder(path);
-});
-
-ipcMain.handle("openCMPWindow", async () => {
-  // @ts-ignore
-  app.overwolf.openCMPWindow();
 });
 
 ipcMain.handle("closeWindow", async () => {
